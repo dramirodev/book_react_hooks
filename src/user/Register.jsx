@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function Register({ setUser }) {
+export default function Register({ dispatch }) {
     const [userName, setUserName] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [userPasswordRepeat, setUserPasswordRepeat] = useState('');
@@ -19,7 +19,7 @@ export default function Register({ setUser }) {
 
     function handleSubmit(evt) {
         evt.preventDefault();
-        setUser(userName);
+        dispatch({ type: 'REGISTER', userName });
     }
 
     function handleDisabled() {
@@ -55,7 +55,7 @@ export default function Register({ setUser }) {
                 value={userPasswordRepeat}
                 onChange={handleUserPasswordRepeat}
             />
-            <input type="submit" value="Register" disabled={handleDisabled} />
+            <input type="submit" value="Register" disabled={handleDisabled()} />
         </form>
     );
 }
