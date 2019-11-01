@@ -4,7 +4,7 @@ import PostList from './components/post/PostList';
 import CreatePost from './components/post/CreatePost';
 import Header from './components/Header';
 import appReducer from './reducers';
-import { ThemeContext } from './contexts';
+import { ThemeContext, StateContext } from './contexts';
 import ChangeTheme from './components/ChangeTheme';
 
 const defaultPosts = [
@@ -29,7 +29,7 @@ function App() {
         user: '',
         posts: defaultPosts,
     });
-    const { user, posts } = state;
+    const { user } = state;
 
     useEffect(() => {
         if (user) {
@@ -40,21 +40,21 @@ function App() {
     }, [user]);
 
     return (
-        <ThemeContext.Provider value={theme}>
-            <div style={{ padding: 8 }}>
-                <Header text="React Hooks Blog" />
-                <ChangeTheme theme={theme} setTheme={setTheme} />
-                <br />
-                <UserBar user={user} dispatch={dispatch} />
-                <br />
-                {user && (
-                    <CreatePost user={user} dispatch={dispatch} posts={posts} />
-                )}
-                <br />
-                <hr />
-                <PostList posts={posts} />
-            </div>
-        </ThemeContext.Provider>
+        <StateContext.Provider value={{ state, dispatch }}>
+            <ThemeContext.Provider value={theme}>
+                <div style={{ padding: 8 }}>
+                    <Header text="React Hooks Blog" />
+                    <ChangeTheme theme={theme} setTheme={setTheme} />
+                    <br />
+                    <UserBar />
+                    <br />
+                    {user && <CreatePost />}
+                    <br />
+                    <hr />
+                    <PostList />
+                </div>
+            </ThemeContext.Provider>
+        </StateContext.Provider>
     );
 }
 

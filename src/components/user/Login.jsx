@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { StateContext } from '../../contexts';
 
-export default function Login({ dispatch }) {
+export default function Login() {
     const [userName, setUserName] = useState('');
+    const { dispatch } = useContext(StateContext);
 
     function handleUserName(evt) {
         setUserName(evt.target.value);

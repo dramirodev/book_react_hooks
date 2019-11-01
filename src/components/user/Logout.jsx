@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { StateContext } from '../../contexts';
 
-export default function Logout({ user, dispatch }) {
+export default function Logout() {
+    const { state, dispatch } = useContext(StateContext);
+    const { user } = state;
     function handleLogout(evt) {
         evt.preventDefault();
         dispatch({ type: 'LOGOUT' });
