@@ -7,18 +7,18 @@ import appReducer from './reducers';
 import { ThemeContext, StateContext } from './contexts';
 import ChangeTheme from './components/ChangeTheme';
 
-const defaultPosts = [
-    {
-        title: 'React Hooks',
-        content: 'The greatest thing since sliced bread!',
-        author: 'Daniel Bugl',
-    },
-    {
-        title: 'Using React Fragments',
-        content: 'Keeping the DOM tree clean!',
-        author: 'Daniel Bugl',
-    },
-];
+// const defaultPosts = [
+//     {
+//         title: 'React Hooks',
+//         content: 'The greatest thing since sliced bread!',
+//         author: 'Daniel Bugl',
+//     },
+//     {
+//         title: 'Using React Fragments',
+//         content: 'Keeping the DOM tree clean!',
+//         author: 'Daniel Bugl',
+//     },
+// ];
 
 function App() {
     const [theme, setTheme] = useState({
@@ -27,9 +27,15 @@ function App() {
     });
     const [state, dispatch] = useReducer(appReducer, {
         user: '',
-        posts: defaultPosts,
+        posts: [],
     });
     const { user } = state;
+
+    useEffect(() => {
+        fetch('/api/posts')
+            .then((result) => result.json())
+            .then((posts) => dispatch({ type: 'FETCH_POSTS', posts }));
+    }, []);
 
     useEffect(() => {
         if (user) {
