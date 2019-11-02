@@ -24,6 +24,11 @@
       "id": 1,
       "username": "Daniel Bugl",
       "password": "supersecure42"
+    },
+    {
+      "username": "david",
+      "password": "david",
+      "id": 2
     }
   ],
   "themes": [
