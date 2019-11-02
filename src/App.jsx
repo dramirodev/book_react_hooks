@@ -1,25 +1,12 @@
-import React, { useReducer, useEffect, useState } from 'react';
-import UserBar from './components/user/UserBar';
-import PostList from './components/post/PostList';
-import CreatePost from './components/post/CreatePost';
-import Header from './components/Header';
-import appReducer from './reducers';
-import { ThemeContext, StateContext } from './contexts';
+import React, { useEffect, useReducer, useState } from 'react';
+import { useResource } from 'react-request-hook';
 import ChangeTheme from './components/ChangeTheme';
-
-// const defaultPosts = [
-//     {
-//         title: 'React Hooks',
-//         content: 'The greatest thing since sliced bread!',
-//         author: 'Daniel Bugl',
-//     },
-//     {
-//         title: 'Using React Fragments',
-//         content: 'Keeping the DOM tree clean!',
-//         author: 'Daniel Bugl',
-//     },
-// ];
-
+import Header from './components/Header';
+import CreatePost from './components/post/CreatePost';
+import PostList from './components/post/PostList';
+import UserBar from './components/user/UserBar';
+import { StateContext, ThemeContext } from './contexts';
+import appReducer from './reducers';
 function App() {
     const [theme, setTheme] = useState({
         primaryColor: 'deepskyblue',
@@ -28,15 +15,25 @@ function App() {
     const [state, dispatch] = useReducer(appReducer, {
         user: '',
         posts: [],
+        error: '',
     });
-    const { user } = state;
 
+    const { user, error } = state;
+
+    const [posts, getPosts] = useResource(() => ({
+        url: '/posts',
+        method: 'get',
+    }));
+
+    useEffect(getPosts, []);
     useEffect(() => {
-        fetch('/api/posts')
-            .then((result) => result.json())
-            .then((posts) => dispatch({ type: 'FETCH_POSTS', posts }));
-    }, []);
-
+        if (posts && posts.error) {
+            dispatch({ type: 'POSTS_ERROR' });
+        }
+        if (posts && posts.data) {
+            dispatch({ type: 'FETCH_POSTS', posts: posts.data.reverse() });
+        }
+    }, [posts]);
     useEffect(() => {
         if (user) {
             document.title = `${user} - React Hooks Blog`;
@@ -57,6 +54,7 @@ function App() {
                     {user && <CreatePost />}
                     <br />
                     <hr />
+                    {error && <b>{error}</b>}
                     <PostList />
                 </div>
             </ThemeContext.Provider>

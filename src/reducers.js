@@ -27,9 +27,19 @@ function postsReducer(state, action) {
     }
 }
 
+function erroReducer(state, action) {
+    switch (action.type) {
+        case 'POSTS_ERROR':
+            return 'Failed to fetch posts';
+        default:
+            return state;
+    }
+}
+
 export default function appReducer(state, action) {
     return {
         user: userReducer(state.user, action),
         posts: postsReducer(state.posts, action),
+        error: erroReducer(state.error, action),
     };
 }
