@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useResource } from 'react-request-hook';
 import { StateContext } from '../../contexts';
+import { useNavigation } from 'react-navi';
 
 export default function CreatePost() {
     const [title, setTitle] = useState('');
@@ -12,14 +13,16 @@ export default function CreatePost() {
         data: { title, content, author },
     }));
     const { user } = state;
+    const navigation = useNavigation();
     useEffect(() => {
         if (post && post.data) {
             dispatch({
                 type: 'CREATE_POST',
                 ...post.data,
             });
+            navigation.navigate(`/view/${post.data.id}`);
         }
-    }, [content, dispatch, post, title, user]);
+    }, [dispatch, navigation, post]);
     function handleTitle(evt) {
         setTitle(evt.target.value);
     }
