@@ -1,11 +1,12 @@
+import { mount, route } from 'navi';
 import React, { useEffect, useReducer, useState } from 'react';
-
-import HeaderBar from './pages/HeaderBar';
-
+import { Router, View } from 'react-navi';
 import { StateContext, ThemeContext } from './contexts';
-import appReducer from './reducers';
+import HeaderBar from './pages/HeaderBar';
 import HomePage from './pages/HomePage';
 import PostPage from './pages/PostPage';
+import appReducer from './reducers';
+
 function App() {
     const [theme, setTheme] = useState({
         primaryColor: 'deepskyblue',
@@ -17,7 +18,14 @@ function App() {
         error: '',
     });
 
-    const { user, error } = state;
+    const { user } = state;
+
+    const routes = mount({
+        '/': route({ view: <HomePage /> }),
+        '/view/:id': route((req) => {
+            return { view: <PostPage id={req.params.id} /> };
+        }),
+    });
 
     useEffect(() => {
         if (user) {
@@ -30,10 +38,13 @@ function App() {
     return (
         <StateContext.Provider value={{ state, dispatch }}>
             <ThemeContext.Provider value={theme}>
-                <div style={{ padding: 8 }}>
-                    <HeaderBar setTheme={setTheme} />
-                    <PostPage id={'react-hooks'} />
-                </div>
+                <Router routes={routes}>
+                    <div style={{ padding: 8 }}>
+                        <HeaderBar setTheme={setTheme} />
+                        <hr />
+                        <View />
+                    </div>
+                </Router>
             </ThemeContext.Provider>
         </StateContext.Provider>
     );

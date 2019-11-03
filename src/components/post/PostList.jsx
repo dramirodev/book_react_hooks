@@ -9,7 +9,7 @@ export default function PostList() {
     return (
         <div>
             {posts.map((p, i) => {
-                return <Post {...p} key={`post-${i}`} />;
+                return <Post {...p} key={`post-${i}`} short={true} />;
             })}
         </div>
     );
