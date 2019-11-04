@@ -1,10 +1,15 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { StateContext } from '../../contexts';
+import React, { useContext, useEffect } from 'react';
+import { useInput } from 'react-hookedup';
 import { useResource } from 'react-request-hook';
+import { StateContext } from '../../contexts';
 export default function Register() {
-    const [userName, setUserName] = useState('');
-    const [userPassword, setUserPassword] = useState('');
-    const [userPasswordRepeat, setUserPasswordRepeat] = useState('');
+    const { value: userName, bindToInput: bindUserName } = useInput('');
+    const { value: userPassword, bindToInput: bindUserPassword } = useInput('');
+    const {
+        value: userPasswordRepeat,
+        bindToInput: bindUserPasswordRepeat,
+    } = useInput('');
+
     const { dispatch } = useContext(StateContext);
     const [user, register] = useResource((username, password) => ({
         url: '/users',
@@ -17,18 +22,6 @@ export default function Register() {
             dispatch({ type: 'REGISTER', username: user.data.username });
         }
     });
-
-    function handleUserName(evt) {
-        setUserName(evt.target.value);
-    }
-
-    function handleUserPassword(evt) {
-        setUserPassword(evt.target.value);
-    }
-
-    function handleUserPasswordRepeat(evt) {
-        setUserPasswordRepeat(evt.target.value);
-    }
 
     function handleSubmit(evt) {
         evt.preventDefault();
@@ -50,7 +43,7 @@ export default function Register() {
                 name="register_username"
                 id="register_username"
                 value={userName}
-                onChange={handleUserName}
+                {...bindUserName}
             />
             <label htmlFor="register_password">Password:</label>
             <input
@@ -58,7 +51,7 @@ export default function Register() {
                 name="register_password"
                 id="register_password"
                 value={userPassword}
-                onChange={handleUserPassword}
+                {...bindUserPassword}
             />
             <label htmlFor="register_password_repeat">Password:</label>
             <input
@@ -66,7 +59,7 @@ export default function Register() {
                 name="register_password_repeat"
                 id="register_password_repeat"
                 value={userPasswordRepeat}
-                onChange={handleUserPasswordRepeat}
+                {...bindUserPasswordRepeat}
             />
             <input type="submit" value="Register" disabled={handleDisabled()} />
         </form>

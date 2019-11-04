@@ -1,11 +1,28 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { useInput } from 'react-hookedup';
+import { useNavigation } from 'react-navi';
 import { useResource } from 'react-request-hook';
 import { StateContext } from '../../contexts';
-import { useNavigation } from 'react-navi';
+import useUndo from 'use-undo';
+import { useDebouncedCallback } from 'use-debounce';
 
 export default function CreatePost() {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const { value: title, bindToInput: bindTitle } = useInput('');
+    const [content, setInput] = useState('');
+    const [
+        undoContent,
+        { set: setContent, undo, redo, canUndo, canRedo },
+    ] = useUndo('');
+
+    const [setDebounce, cancelDebounce] = useDebouncedCallback((value) => {
+        setContent(value);
+    }, 200);
+
+    useEffect(() => {
+        cancelDebounce();
+        setInput(undoContent.present);
+    }, [cancelDebounce, undoContent]);
+
     const { state, dispatch } = useContext(StateContext);
     const [post, createPost] = useResource(({ title, content, author }) => ({
         url: '/posts',
@@ -23,17 +40,15 @@ export default function CreatePost() {
             navigation.navigate(`/view/${post.data.id}`);
         }
     }, [dispatch, navigation, post]);
-    function handleTitle(evt) {
-        setTitle(evt.target.value);
-    }
-    function handleContent(evt) {
-        setContent(evt.target.value);
+
+    function handleContent(e) {
+        const { value } = e.target;
+        setInput(value);
+        setDebounce(value);
     }
     function handleCreate(event) {
         event.preventDefault();
         createPost({ title, content, author: user });
-        setTitle('');
-        setContent('');
     }
 
     return (
@@ -49,10 +64,16 @@ export default function CreatePost() {
                     name="create_title"
                     id="create_title"
                     value={title}
-                    onChange={handleTitle}
+                    {...bindTitle}
                 />
             </div>
             <textarea value={content} onChange={handleContent} />
+            <button type="button" onClick={undo} disabled={!canUndo}>
+                Undo
+            </button>
+            <button type="button" onClick={redo} disabled={!canRedo}>
+                Redo
+            </button>
             <input type="submit" value="Create" />
         </form>
     );

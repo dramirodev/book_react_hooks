@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@rehooks/window-size": "^1.0.2",
     "prop-types": "latest",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0"
+    "react-hookedup": "^0.1.2",
+    "react-scripts": "3.2.0",
+    "use-debounce": "^3.1.0",
+    "use-undo": "^1.0.3"
   },
   "scripts": {
     "start": "yarn concurrently \"yarn run start:server\" \"yarn run start:client\"",
