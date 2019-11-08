@@ -1,7 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useInput } from 'react-hookedup';
-import { useResource } from 'react-request-hook';
-import { StateContext } from '../../contexts';
+import { useAPIRegister, useDispatch } from '../../hooks';
 export default function Register() {
     const { value: userName, bindToInput: bindUserName } = useInput('');
     const { value: userPassword, bindToInput: bindUserPassword } = useInput('');
@@ -10,12 +9,8 @@ export default function Register() {
         bindToInput: bindUserPasswordRepeat,
     } = useInput('');
 
-    const { dispatch } = useContext(StateContext);
-    const [user, register] = useResource((username, password) => ({
-        url: '/users',
-        method: 'post',
-        data: { username, password },
-    }));
+    const dispatch = useDispatch();
+    const [user, register] = useAPIRegister();
 
     useEffect(() => {
         if (user && user.data) {
@@ -37,31 +32,31 @@ export default function Register() {
     }
     return (
         <form onSubmit={handleSubmit}>
-            <label htmlFor="register_username">Username</label>
+            <label htmlFor='register_username'>Username</label>
             <input
-                type="text"
-                name="register_username"
-                id="register_username"
+                type='text'
+                name='register_username'
+                id='register_username'
                 value={userName}
                 {...bindUserName}
             />
-            <label htmlFor="register_password">Password:</label>
+            <label htmlFor='register_password'>Password:</label>
             <input
-                type="password"
-                name="register_password"
-                id="register_password"
+                type='password'
+                name='register_password'
+                id='register_password'
                 value={userPassword}
                 {...bindUserPassword}
             />
-            <label htmlFor="register_password_repeat">Password:</label>
+            <label htmlFor='register_password_repeat'>Password:</label>
             <input
-                type="password"
-                name="register_password_repeat"
-                id="register_password_repeat"
+                type='password'
+                name='register_password_repeat'
+                id='register_password_repeat'
                 value={userPasswordRepeat}
                 {...bindUserPasswordRepeat}
             />
-            <input type="submit" value="Register" disabled={handleDisabled()} />
+            <input type='submit' value='Register' disabled={handleDisabled()} />
         </form>
     );
 }

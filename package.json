@@ -10,7 +10,11 @@
     "react-hookedup": "^0.1.2",
     "react-scripts": "3.2.0",
     "use-debounce": "^3.1.0",
-    "use-undo": "^1.0.3"
+    "use-undo": "^1.0.3",
+    "axios": "0.19.0",
+    "navi": "^0.13.6",
+    "react-navi": "^0.13.6",
+    "react-request-hook": "2.1.1"
   },
   "scripts": {
     "start": "yarn concurrently \"yarn run start:server\" \"yarn run start:client\"",
@@ -36,7 +40,6 @@
     ]
   },
   "devDependencies": {
-    "axios": "0.19.0",
     "concurrently": "5.0.0",
     "eslint": "^6.6.0",
     "eslint-plugin-import": "^2.18.2",
@@ -45,9 +48,6 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "http-proxy-middleware": "0.20.0",
     "json-server": "0.15.1",
-    "navi": "^0.13.6",
-    "prettier": "1.18.2",
-    "react-navi": "^0.13.6",
-    "react-request-hook": "2.1.1"
+    "prettier": "1.18.2"
   }
 }

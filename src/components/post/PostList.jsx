@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { usePostsState } from '../../hooks';
 import Post from './Post';
-import { StateContext } from '../../contexts';
 
 export default function PostList() {
-    const { state } = useContext(StateContext);
-    const { posts } = state;
+    const posts = usePostsState();
 
     return (
         <div>
