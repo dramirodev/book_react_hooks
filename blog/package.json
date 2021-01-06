@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@rehooks/window-size": "^1.0.2",
-    "axios": "0.19.0",
+    "axios": "0.21.1",
     "navi": "^0.13.6",
     "prop-types": "latest",
     "react": "^16.11.0",
